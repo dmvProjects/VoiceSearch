@@ -4,9 +4,9 @@ import requests
 token = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE2NDg3MzAyNTIsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJmcmVlbWl1bVwiOjAsXCJleHRpZFwiOlwibWFjOjExOjIyOjMzOjQ0OjU5OjY2XCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMzcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnBlcm1cIn1dLFwiZXh0aWRcIjpcInBlcm06NTkwMDE4NTA1MTY2XCIsXCJzdWJzY3JpYmVyX3R5cGVcIjpcIkIyQ1wiLFwiaXNfZ3Vlc3RcIjpmYWxzZSxcInR5cGVcIjpcInN1YnNjcmliZXJcIixcImlkXCI6ODEzMjM3NjV9LFwicGxhdGZvcm1cIjp7XCJvcGVyYXRvclwiOntcInRpdGxlXCI6XCJcIixcImlkXCI6MixcImV4dGlkXCI6XCJlclwifSxcInRpdGxlXCI6XCJcIixcImlkXCI6NDQsXCJleHRpZFwiOlwiYW5kcm9pZF9pcHR2XCJ9LFwiYXR0cnNcIjpudWxsLFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6OTA0MjIzMDV9fSIsInNpZ25hdHVyZSI6InhHODlnbm1USGtIbk90RGJmdGhaeHlpUGd3Y2l1aDJUU0hCVlwvc3dPWklnPSJ9'
 
 
-# Вводняе для поиска вбивать в этот словарь. Если значения в поле не True, то оно игнорируется
-template = {'text': 'СТС',  # string
-            'title': '',  # string
+# Вводные для поиска вбивать в этот словарь. Если значения в поле не True, то оно игнорируется
+template = {'text': '',  # string
+            'title': 'СТС',  # string
             'types': [],  # movie, serial, schedule, subscription, channel, channel_package
             'countryNames': [],  # string
             'countryIds': [],  # integer
