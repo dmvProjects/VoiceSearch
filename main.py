@@ -1,12 +1,12 @@
 import json
 import requests
 
-token = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE2NDg3MzAyNTIsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJmcmVlbWl1bVwiOjAsXCJleHRpZFwiOlwibWFjOjExOjIyOjMzOjQ0OjU5OjY2XCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMzcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnBlcm1cIn1dLFwiZXh0aWRcIjpcInBlcm06NTkwMDE4NTA1MTY2XCIsXCJzdWJzY3JpYmVyX3R5cGVcIjpcIkIyQ1wiLFwiaXNfZ3Vlc3RcIjpmYWxzZSxcInR5cGVcIjpcInN1YnNjcmliZXJcIixcImlkXCI6ODEzMjM3NjV9LFwicGxhdGZvcm1cIjp7XCJvcGVyYXRvclwiOntcInRpdGxlXCI6XCJcIixcImlkXCI6MixcImV4dGlkXCI6XCJlclwifSxcInRpdGxlXCI6XCJcIixcImlkXCI6NDQsXCJleHRpZFwiOlwiYW5kcm9pZF9pcHR2XCJ9LFwiYXR0cnNcIjpudWxsLFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6OTA0MjIzMDV9fSIsInNpZ25hdHVyZSI6InhHODlnbm1USGtIbk90RGJmdGhaeHlpUGd3Y2l1aDJUU0hCVlwvc3dPWklnPSJ9'
+TOKEN = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE2NDg3MzAyNTIsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJmcmVlbWl1bVwiOjAsXCJleHRpZFwiOlwibWFjOjExOjIyOjMzOjQ0OjU5OjY2XCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMzcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnBlcm1cIn1dLFwiZXh0aWRcIjpcInBlcm06NTkwMDE4NTA1MTY2XCIsXCJzdWJzY3JpYmVyX3R5cGVcIjpcIkIyQ1wiLFwiaXNfZ3Vlc3RcIjpmYWxzZSxcInR5cGVcIjpcInN1YnNjcmliZXJcIixcImlkXCI6ODEzMjM3NjV9LFwicGxhdGZvcm1cIjp7XCJvcGVyYXRvclwiOntcInRpdGxlXCI6XCJcIixcImlkXCI6MixcImV4dGlkXCI6XCJlclwifSxcInRpdGxlXCI6XCJcIixcImlkXCI6NDQsXCJleHRpZFwiOlwiYW5kcm9pZF9pcHR2XCJ9LFwiYXR0cnNcIjpudWxsLFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6OTA0MjIzMDV9fSIsInNpZ25hdHVyZSI6InhHODlnbm1USGtIbk90RGJmdGhaeHlpUGd3Y2l1aDJUU0hCVlwvc3dPWklnPSJ9'
 
 
 # Вводные для поиска вбивать в этот словарь. Если значения в поле не True, то оно игнорируется
 template = {'text': '',  # string
-            'title': 'СТС',  # string
+            'title': 'Hustler',  # string
             'types': [],  # movie, serial, schedule, subscription, channel, channel_package
             'countryNames': [],  # string
             'countryIds': [],  # integer
@@ -42,21 +42,20 @@ lenght = {'title': 40,
           'genres': 40,
           'description': 1000}
 
+THRESHOLD_TO_DISPLAY = 15
+
 
 def search_api_request(**kwargs):
     request_body = {}
     for k, v in template.items():
         if v:
             request_body[k] = v
-    print('Вводные')
-    for k, v in request_body.items():
-        print(f'{k}: {v}')
-    print('')
+    print(f'Запрос:\n{request_body}\n')
     request_body = json.dumps(request_body, indent=2)
     r = requests.post('http://testasr.rd.ertelecom.ru/search',
                       headers={'Content-Type': 'application/json',
                                'accept': 'application/json',
-                               'X-Auth-Token': token,
+                               'X-Auth-Token': TOKEN,
                                },
                       data=request_body,
                       timeout=1)
@@ -74,14 +73,24 @@ def search_api_request(**kwargs):
         fields_line = [str(field)[:lenght[field]] for field in fields]
         print(field_format.format(*fields_line), '\n')
         result_with_dif = r.json()['items']
+        if not result_with_dif:
+            print('NO RESULTS')
+            return False
         top_weight = result_with_dif[0]['weight']
+        thd = False
         for item in result_with_dif:
+            dif = int((1 - item["weight"] / top_weight) * 100)
             if item["weight"] == top_weight:
                 item['dif'] = '0%'
             else:
-                item['dif'] = f'-{int((1 - item["weight"] / top_weight) * 100)}%'
+                item['dif'] = f'-{dif}%'
+            if dif >= THRESHOLD_TO_DISPLAY and not thd:
+                print(f'\n-------------------------------------------- threshold to display -{THRESHOLD_TO_DISPLAY}% --------------------------------------------\n')
+                thd = True
             result = [str(item[field])[:lenght[field]] for field in fields]
             print(field_format.format(*result))
+        if not thd:
+            print(f'\n-------------------------------------------- threshold to display -{THRESHOLD_TO_DISPLAY}% --------------------------------------------\n')
 
 
 if __name__ == '__main__':
