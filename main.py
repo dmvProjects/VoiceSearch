@@ -2,21 +2,23 @@ import json
 import requests
 from addr import *
 
+text = 'фильм'
 
-engine = vanya_sph04modified
+# engine = vanya
 # engine = sergey_bert_1
-# engine = sergey_bert_matnicore
+engine = sergey_bert_matnicore
 
+mode = 'showcases'    # showcases, list
 
 # Вводные для поиска вбивать в этот словарь. Если значения у ключа не True, то оно игнорируется
-template = {'text': 'Plan B',  # string
+template = {'text': text,  # string
             'title': '',  # string
             # 'types': ['movie', 'serial', 'schedule', 'subscription', 'channel', 'channel_package', 'program', 'live_tv_show'],  # movie, serial, schedule, subscription, channel, channel_package, program, live_tv_show
             'types': [],
             'countryNames': [],  # string
             'countryIds': [],  # integer
             'ageRating': '',  # R0, R6, R12, R16, R18
-            'adultState': '',  # NOT_ADULT, ADULT
+            'adultState': '',  # "type": "not-adult", "type": "adult"
             'kinopoiskRatingFrom': 0,  # float 0..10
             'kinopoiskRatingTo': 0,  # float 0..10
             'imdbRatingFrom': 0,  # float 0..10
@@ -28,7 +30,7 @@ template = {'text': 'Plan B',  # string
             'persons': [],  # string
             'releasedAtFrom': '',  # date 2022-03-05
             'releasedAtTo': '',  # date 2022-03-05
-            'limit': 20,  # integer 1..1000, default 10
+            'limit': 0,  # integer 1..1000, default 10
             'page': 0,  # integer 1.., default 1
             'sortBy': '',  # isHd, kinopoiskrating, imdbrating, weight; default: weight
             'sortDirection': '',  # ASC, DESC; default: DESC
@@ -50,11 +52,25 @@ lenght = {'title': 30,
           'description': 2000
           }
 
+if mode == 'showcases':
+    lenght = {'title': 30,
+              'type': 10,
+              'id': 10,
+              'weight': 8,
+              'dif': 5,
+              # 'genres': 20,
+              # 'imdbRating': 6,
+              # 'kinopoiskRating': 6,
+              # 'rating': 6,
+              # 'adult': 9,
+              'description': 2000
+              }
+
 THRESHOLD_1 = engine['threshold_1']
 THRESHOLD_2 = engine['threshold_2']
 
 
-def search_api_request():
+def search_api_request(mode='showcases'):
     # Забираем только заполненные поля из вводных для формирования запроса
     request_body = {}
     for k, v in template.items():
@@ -73,10 +89,10 @@ def search_api_request():
     else:
         # Проверяем полученный ответ на наличие результатов
         result = r.json()['items']
+
         if not result:
             print('NO RESULTS')
             return False
-        # print(result[0])
         print(f"Время выполнения запроса: {r.elapsed.total_seconds()}")
         print(f"Всего результатов: {r.json()['total']}\n")
 
@@ -105,34 +121,76 @@ def search_api_request():
             top_weight = r_top.json()['items'][0]['weight']
             # result_with_dif = r_top.json()['items'] + result_with_dif  # можно добавить к выводу первый результат с первой страницы для страниц >2
 
-        # Обработка и вывод всех ассетов из ответа
-        thd_1 = False  # статусы трешолдов выводились/не выводились
-        thd_2 = False
-        # расчет разницы веса ассета относительно максимального
-        for item in result:
-            dif = int((1 - item["weight"] / top_weight) * 100)
-            if item["weight"] == top_weight:
-                item['dif'] = '0%'
-            else:
-                item['dif'] = f'-{dif}%'
-            # вывод строк трешолдов на границах весов
-            if not thd_1 and dif >= THRESHOLD_1:
-                print(f'\n-------------------------------------------- Threshold_1 -{THRESHOLD_1}% --------------------------------------------\n')
-                thd_1 = True
-            if not thd_2 and dif >= THRESHOLD_2:
-                print(f'\n******************************************** Threshold_2 -{THRESHOLD_2}% ********************************************\n')
-                thd_2 = True
-            # очистка описания от ломающих верстку литералов
-            if 'description' in item.keys():
-                item['description'] = item['description'].replace('\n', ' ').replace('\r', ' ')
-            # приведение к описанному формату и длине строк и вывод
-            asset = [str(item[field])[:lenght[field]] for field in fields]
-            print(field_format.format(*asset))
-        # вывод строки с первым трешолдом под таблицей, если все ассеты попали выше первого трешолда
-        if not thd_1:
-            print(f'\n-------------------------------------------- Threshold 1 -{THRESHOLD_1}% --------------------------------------------\n')
+        if mode == 'list':
+            # Обработка и вывод всех ассетов из ответа
+            thd_1 = False  # статусы трешолдов выводились/не выводились
+            thd_2 = False
+
+            for item in result:
+                if engine == vanya:
+                    item['adult'] = item['adult']['type']
+                # расчет разницы веса ассета относительно максимального
+                dif = int((1 - item["weight"] / top_weight) * 100)
+                if item["weight"] == top_weight:
+                    item['dif'] = 'MAX'
+                else:
+                    item['dif'] = f'-{dif}%'
+                # вывод строк трешолдов на границах весов
+                if not thd_1 and dif >= THRESHOLD_1:
+                    print(f'\n-------------------------------------------- Threshold_1 -{THRESHOLD_1}% --------------------------------------------\n')
+                    thd_1 = True
+                if not thd_2 and dif >= THRESHOLD_2:
+                    print(f'\n******************************************** Threshold_2 -{THRESHOLD_2}% ********************************************\n')
+                    thd_2 = True
+                # очистка описания от ломающих верстку литералов
+                if 'description' in item.keys():
+                    item['description'] = item['description'].replace('\n', ' ').replace('\r', ' ')
+                # приведение к описанному формату и длине строк и вывод
+                asset = [str(item[field])[:lenght[field]] for field in fields]
+                print(field_format.format(*asset))
+            # вывод строки с первым трешолдом под таблицей, если все ассеты попали выше первого трешолда
+            if not thd_1:
+                print(f'\n-------------------------------------------- Threshold 1 -{THRESHOLD_1}% --------------------------------------------\n')
+
+        elif mode == 'showcases':
+            showcases = {}
+            for item in result:
+                if engine == vanya:
+                    item['adult'] = item['adult']['type']
+
+                dif = int((1 - item["weight"] / top_weight) * 100)
+                if item["weight"] == top_weight:
+                    item['dif'] = 'MAX'
+                else:
+                    item['dif'] = f'-{dif}%'
+
+                if 'description' in item.keys():
+                    item['description'] = item['description'].replace('\n', ' ').replace('\r', ' ')
+
+                # if item['type'] not in showcases.keys():
+                #     asset = [str(item[field])[:lenght[field]] for field in fields]
+                #     asset_str = field_format.format(*asset) + '\n'
+                #     showcases[item['type']] = asset_str
+                # else:
+                #     asset = [str(item[field])[:lenght[field]] for field in fields]
+                #     asset_str = field_format.format(*asset) + '\n'
+                #     showcases[item['type']] += asset_str
+                if item['type'] not in showcases.keys():
+                    showcases[item['type']] = []
+                asset = [str(item[field])[:lenght[field]] for field in fields]
+                asset_str = field_format.format(*asset) + '\n'
+                showcases[item['type']].append(asset_str)
+            # print(showcases)
+            genres = {'movie': 'Фильмы',
+                      'serial': 'Сериалы',
+                      'program': 'Телевидение',
+                      'channel': 'Недавние передачи',
+                      'live-tv-show': 'Фильмы'}
+            for k, v in showcases.items():
+                print(f'\n-------------------------------------------- {k} ({len(v)})--------------------------------------------\n')
+                print(''.join(v))
 
 
 if __name__ == '__main__':
-    search_api_request()
+    search_api_request(mode=mode)
 
