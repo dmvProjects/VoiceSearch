@@ -2,18 +2,17 @@ import json
 import requests
 from addr import *
 
-text = 'фильм'
+text = 'Лед'
 
 # engine = vanya
-# engine = sergey_bert_1
 engine = sergey_bert_matnicore
 
-mode = 'showcases'    # showcases, list
+mode = 'list'    # showcases, list
 
 # Вводные для поиска вбивать в этот словарь. Если значения у ключа не True, то оно игнорируется
 template = {'text': text,  # string
             'title': '',  # string
-            # 'types': ['movie', 'serial', 'schedule', 'subscription', 'channel', 'channel_package', 'program', 'live_tv_show'],  # movie, serial, schedule, subscription, channel, channel_package, program, live_tv_show
+            # 'types': ['movie', 'serial', 'schedule', 'subscription', 'channel', 'program'],  # movie, serial, schedule, subscription, channel, channel_package, program, live_tv_show
             'types': [],
             'countryNames': [],  # string
             'countryIds': [],  # integer
@@ -88,6 +87,7 @@ def search_api_request(mode='showcases'):
         print(r.status_code, r.text, r.headers)
     else:
         # Проверяем полученный ответ на наличие результатов
+        # print(r.json())
         result = r.json()['items']
 
         if not result:
@@ -127,8 +127,7 @@ def search_api_request(mode='showcases'):
             thd_2 = False
 
             for item in result:
-                if engine == vanya:
-                    item['adult'] = item['adult']['type']
+                item['adult'] = item['adult']['type']
                 # расчет разницы веса ассета относительно максимального
                 dif = int((1 - item["weight"] / top_weight) * 100)
                 if item["weight"] == top_weight:

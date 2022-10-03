@@ -2,7 +2,8 @@ import json
 import requests
 from addr import *
 
-text = 'один'
+
+text = 'Новости'
 
 lenght = {'title': 30,
           'type': 10,
@@ -10,7 +11,7 @@ lenght = {'title': 30,
           'description': 2000
           }
 
-engine = movix
+engine = movix_showcases
 
 
 def movix_searh_request():
@@ -44,7 +45,7 @@ def movix_searh_request():
     for showcase in result:
         print(f'\n-------------------------------------------- {showcase["title"]} ({showcase["total"]})--------------------------------------------\n')
         for item in showcase['items']:
-            print(item)
+            # print(item)
             if item['type'] not in ('schedule', ):
                 asset = [str(item[field])[:lenght[field]] for field in fields]
             else:
