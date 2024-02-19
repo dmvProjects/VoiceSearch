@@ -1,4 +1,4 @@
-TOKEN = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE2NjcxMDcyMTIsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJmcmVlbWl1bVwiOm51bGwsXCJleHRpZFwiOlwibWFjOkQ0OkNGOkY5OjIyOjA1OkRDXCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMzcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnBlcm1cIn1dLFwiZXh0aWRcIjpcInBlcm06NTkwMDE4NTY3NjI1XCIsXCJzdWJzY3JpYmVyX3R5cGVcIjpcIkIyQ1wiLFwiaXNfZ3Vlc3RcIjpmYWxzZSxcInR5cGVcIjpcInN1YnNjcmliZXJcIixcImlkXCI6ODM0OTI0NzB9LFwicGxhdGZvcm1cIjp7XCJvcGVyYXRvclwiOntcInRpdGxlXCI6XCJcIixcImlkXCI6MixcImV4dGlkXCI6XCJlclwifSxcInRpdGxlXCI6XCJcIixcImlkXCI6NDQsXCJleHRpZFwiOlwiYW5kcm9pZF9pcHR2XCJ9LFwiYXR0cnNcIjpudWxsLFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6MTE1MTk1MzQ1fX0iLCJzaWduYXR1cmUiOiJ3TzZ3YXZPUXVIR1cxbGxMR3RFSlkzQlZDZUZjSDJQZGt4ZUowRmczVWVRPSJ9'
+TOKEN = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE3MTA5Mjk3MjYsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJleHRpZFwiOlwibWFjOkY4OkYwOjgyOjRCOkY0OjY5XCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMzcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnBlcm1cIn1dLFwiZXh0aWRcIjpcInBlcm06NTkwMDIxODUzMTAwXCIsXCJzdWJzY3JpYmVyX3R5cGVcIjpcIkIyQ1wiLFwiaXNfZ3Vlc3RcIjpmYWxzZSxcInR5cGVcIjpcInN1YnNjcmliZXJcIixcImlkXCI6MTI4MjIyNTU4fSxcInBsYXRmb3JtXCI6e1wib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjExOSxcImV4dGlkXCI6XCJhbmRyb2lkdHZfc3RiXCJ9LFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6MTMyOTQxMzI5fX0iLCJzaWduYXR1cmUiOiJSeW80WURDc3IzMG1RUlpnb3BpSkc0VVZFdE9QOHhxUy9jYkJUUVd5WnJRPSJ9'
 
 text = 'человек'
 
@@ -68,13 +68,13 @@ movix_suggests = {'addr': 'https://discovery-stb3.ertelecom.ru/api/v3/suggests/s
                               },
                   }
 
-bert_showcases = {'addr': 'http://testasr.rd.ertelecom.ru:8008/pages/search',
+bert_showcases = {'addr': 'http://158.160.48.107/pages/search',
                   'headers': {'Content-Type': 'application/json',
                               'X-Auth-Token': TOKEN,
                               },
                   }
 
-bert_suggests = {'addr': 'http://testasr.rd.ertelecom.ru:8008/search',
+bert_suggests = {'addr': 'http://158.160.48.107/search',
                  'headers': {'Content-Type': 'application/json',
                              'X-Auth-Token': TOKEN
                              },

@@ -2,7 +2,7 @@ import requests
 from addr import *
 import json
 
-text = 'фиксики'
+text = 'властелин'
 
 lenght = {'title': 30,
           'type': 10,

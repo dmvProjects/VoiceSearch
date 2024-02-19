@@ -4,8 +4,8 @@ from addr import *
 
 text = 'Лед'
 
-# engine = vanya
-engine = sergey_bert_matnicore
+engine = bert_showcases
+# engine = sergey_bert_matnicore
 
 mode = 'list'    # showcases, list
 
