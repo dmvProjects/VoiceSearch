@@ -2,12 +2,13 @@ import json
 import requests
 from addr import *
 
-text = 'Лед'
+text = 'лед'
 
-engine = bert_showcases
+#engine = bert_showcases
+engine = bert_suggests
 # engine = sergey_bert_matnicore
 
-mode = 'list'    # showcases, list
+mode = 'showcases'    # showcases, list
 
 # Вводные для поиска вбивать в этот словарь. Если значения у ключа не True, то оно игнорируется
 template = {'text': text,  # string
@@ -38,7 +39,7 @@ template = {'text': text,  # string
 
 # Тут задается длина выводимой строки для каждого поля, ячейка обрезается до этого значения,
 # закомментированные поля и поля с значением 0 не выводятся. Порядок вывода = порядок перечисления.
-lenght = {'title': 30,
+length = {'title': 30,
           'type': 10,
           'id': 10,
           'weight': 8,
@@ -52,7 +53,7 @@ lenght = {'title': 30,
           }
 
 if mode == 'showcases':
-    lenght = {'title': 30,
+    length = {'title': 30,
               'type': 10,
               'id': 10,
               'weight': 8,
@@ -69,12 +70,12 @@ THRESHOLD_1 = engine['threshold_1']
 THRESHOLD_2 = engine['threshold_2']
 
 
-def search_api_request(mode='showcases'):
+def search_api_request(mode='suggests'):
     # Забираем только заполненные поля из вводных для формирования запроса
     request_body = {}
-    for k, v in template.items():
-        if v:
-            request_body[k] = v
+    for key, value in template.items():
+        if value:
+            request_body[key] = value
 
     # Формируем и выполняем запрос
     print(f'Запрос:\n{request_body}\n'.replace('\'', '"'))
@@ -87,7 +88,6 @@ def search_api_request(mode='showcases'):
         print(r.status_code, r.text, r.headers)
     else:
         # Проверяем полученный ответ на наличие результатов
-        # print(r.json())
         result = r.json()['items']
 
         if not result:
@@ -97,11 +97,11 @@ def search_api_request(mode='showcases'):
         print(f"Всего результатов: {r.json()['total']}\n")
 
         # Формируем список полей, которые нужно вывести, форматируем по длине, выводим заголовок таблицы
-        fields = [k for k, v in lenght.items() if v]
+        fields = [k for k, v in length.items() if v]
         field_format = ''
         for field in fields:
-            field_format = field_format + '{:<' + str(lenght[field] + 4) + '}'
-        fields_line = [str(field)[:lenght[field]] for field in fields]
+            field_format = field_format + '{:<' + str(length[field] + 4) + '}'
+        fields_line = [str(field)[:length[field]] for field in fields]
         print(field_format.format(*fields_line), '\n')
 
         # определяем вес первого результата как максимум для расчета разницы остальных относительно него и расстановки трешолдов
@@ -119,7 +119,6 @@ def search_api_request(mode='showcases'):
                                   data=request_body_top_json,
                                   timeout=25)
             top_weight = r_top.json()['items'][0]['weight']
-            # result_with_dif = r_top.json()['items'] + result_with_dif  # можно добавить к выводу первый результат с первой страницы для страниц >2
 
         if mode == 'list':
             # Обработка и вывод всех ассетов из ответа
@@ -136,26 +135,24 @@ def search_api_request(mode='showcases'):
                     item['dif'] = f'-{dif}%'
                 # вывод строк трешолдов на границах весов
                 if not thd_1 and dif >= THRESHOLD_1:
-                    print(f'\n-------------------------------------------- Threshold_1 -{THRESHOLD_1}% --------------------------------------------\n')
+                    print(f'\n{"-" * 45} Threshold_1 -{THRESHOLD_1}% {"-" * 45}\n')
                     thd_1 = True
                 if not thd_2 and dif >= THRESHOLD_2:
-                    print(f'\n******************************************** Threshold_2 -{THRESHOLD_2}% ********************************************\n')
+                    print(f'\n{"*" * 45} Threshold_2 -{THRESHOLD_2}% {"*" * 45}\n')
                     thd_2 = True
                 # очистка описания от ломающих верстку литералов
                 if 'description' in item.keys():
                     item['description'] = item['description'].replace('\n', ' ').replace('\r', ' ')
                 # приведение к описанному формату и длине строк и вывод
-                asset = [str(item[field])[:lenght[field]] for field in fields]
+                asset = [str(item[field])[:length[field]] for field in fields]
                 print(field_format.format(*asset))
             # вывод строки с первым трешолдом под таблицей, если все ассеты попали выше первого трешолда
             if not thd_1:
-                print(f'\n-------------------------------------------- Threshold 1 -{THRESHOLD_1}% --------------------------------------------\n')
+                print(f'\n{"-" * 45} Threshold 1 -{THRESHOLD_1}% {"-" * 45}\n')
 
         elif mode == 'showcases':
             showcases = {}
             for item in result:
-                if engine == vanya:
-                    item['adult'] = item['adult']['type']
 
                 dif = int((1 - item["weight"] / top_weight) * 100)
                 if item["weight"] == top_weight:
@@ -176,7 +173,7 @@ def search_api_request(mode='showcases'):
                 #     showcases[item['type']] += asset_str
                 if item['type'] not in showcases.keys():
                     showcases[item['type']] = []
-                asset = [str(item[field])[:lenght[field]] for field in fields]
+                asset = [str(item[field])[:length[field]] for field in fields]
                 asset_str = field_format.format(*asset) + '\n'
                 showcases[item['type']].append(asset_str)
             # print(showcases)
@@ -185,11 +182,10 @@ def search_api_request(mode='showcases'):
                       'program': 'Телевидение',
                       'channel': 'Недавние передачи',
                       'live-tv-show': 'Фильмы'}
-            for k, v in showcases.items():
-                print(f'\n-------------------------------------------- {k} ({len(v)})--------------------------------------------\n')
-                print(''.join(v))
+            for key, value in showcases.items():
+                print(f'\n{"-" * 45}{key} ({len(value)}){"-" * 45}\n')
+                print(''.join(value))
 
 
 if __name__ == '__main__':
     search_api_request(mode=mode)
-

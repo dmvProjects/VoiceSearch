@@ -1,4 +1,4 @@
-TOKEN = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE3MTA5Mjk3MjYsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJleHRpZFwiOlwibWFjOkY4OkYwOjgyOjRCOkY0OjY5XCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMzcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnBlcm1cIn1dLFwiZXh0aWRcIjpcInBlcm06NTkwMDIxODUzMTAwXCIsXCJzdWJzY3JpYmVyX3R5cGVcIjpcIkIyQ1wiLFwiaXNfZ3Vlc3RcIjpmYWxzZSxcInR5cGVcIjpcInN1YnNjcmliZXJcIixcImlkXCI6MTI4MjIyNTU4fSxcInBsYXRmb3JtXCI6e1wib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjExOSxcImV4dGlkXCI6XCJhbmRyb2lkdHZfc3RiXCJ9LFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6MTMyOTQxMzI5fX0iLCJzaWduYXR1cmUiOiJSeW80WURDc3IzMG1RUlpnb3BpSkc0VVZFdE9QOHhxUy9jYkJUUVd5WnJRPSJ9'
+TOKEN = 'eyJkYXRhIjoie1wiZXhwaXJlc1wiOjE3MTgzNDkzOTEsXCJsaWZlc3BhblwiOjI1OTIwMDAsXCJwcmluY2lwYWxcIjp7XCJmcmVlbWl1bVwiOjAsXCJleHRpZFwiOlwibWFjOkFBOkJCOkNDOkREOjM4OjE1XCIsXCJzdWJzY3JpYmVyXCI6e1wiZ3JvdXBzXCI6W3tcImlkXCI6MzUwMTcsXCJleHRpZFwiOlwiZXI6ZG9tYWluOnNwYlwifV0sXCJleHRpZFwiOlwic3BiOjc4MDAyNzg0NDUxMVwiLFwic3Vic2NyaWJlcl90eXBlXCI6XCJCMkNcIixcImlzX2d1ZXN0XCI6ZmFsc2UsXCJ0eXBlXCI6XCJzdWJzY3JpYmVyXCIsXCJpZFwiOjM3MzE0NTA4fSxcInBsYXRmb3JtXCI6e1wib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjExOSxcImV4dGlkXCI6XCJhbmRyb2lkdHZfc3RiXCJ9LFwiZ3JvdXBzXCI6W3tcImlkXCI6MzQxOTcsXCJleHRpZFwiOlwiZXI6ZXZlcnlvbmVcIn1dLFwib3BlcmF0b3JcIjp7XCJ0aXRsZVwiOlwiXCIsXCJpZFwiOjIsXCJleHRpZFwiOlwiZXJcIn0sXCJ0eXBlXCI6XCJkZXZpY2VcIixcImlkXCI6OTA0Mjk5NDJ9fSIsInNpZ25hdHVyZSI6IjBQZmx0TTErZzd0UkNGV3NPZ1Y3cDFNT3hYMDlpWkU3cisxVjMyZXphL3M9In0='
 
 text = 'человек'
 
@@ -46,7 +46,7 @@ just_ai = {'addr': 'https://zb04.just-ai.com/chatadapter/chatapi/GWkawWVR:9b748a
            'headers': {'Content-Type': 'application/json'},
            }
 
-movix_showcases = {'addr': 'https://discovery-stb3.ertelecom.ru/api/v3/pages/search',
+movix_showcases = {'addr': 'http://discovery-stb3.ertelecom.ru/api/v3/pages/search',
                    'headers': {'Content-Type': 'application/json',
                                'X-Auth-Token': TOKEN,
                                'view': 'stb3',
@@ -72,10 +72,16 @@ bert_showcases = {'addr': 'http://158.160.48.107/pages/search',
                   'headers': {'Content-Type': 'application/json',
                               'X-Auth-Token': TOKEN,
                               },
+                  'ranker': '',
+                  'threshold_1': 10,
+                  'threshold_2': 50
                   }
 
 bert_suggests = {'addr': 'http://158.160.48.107/search',
                  'headers': {'Content-Type': 'application/json',
                              'X-Auth-Token': TOKEN
                              },
+                 'ranker': '',
+                  'threshold_1': 10,
+                  'threshold_2': 45
                  }

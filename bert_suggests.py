@@ -2,7 +2,7 @@ import requests
 from addr import *
 import json
 
-# text = 'новости'
+text = 'лед'
 
 engine = bert_suggests
 
